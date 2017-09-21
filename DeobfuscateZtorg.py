@@ -15,7 +15,7 @@ from com.pnfsoftware.jeb.core.output import AbstractUnitRepresentation, UnitRepr
 from com.pnfsoftware.jeb.core.units.code import ICodeUnit, ICodeItem
 from com.pnfsoftware.jeb.core.units.code.java import IJavaSourceUnit, IJavaStaticField, IJavaNewArray, IJavaConstant, IJavaCall, IJavaField, IJavaMethod, IJavaClass, IJavaArrayElt, JavaElementType
 
-class DecryptZtorg(IScript):
+class DeobfuscateZtorg(IScript):
 
   def run(self, ctx):
     engctx = ctx.getEnginesContext()
