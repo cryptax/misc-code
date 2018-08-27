@@ -3,7 +3,7 @@ from com.pnfsoftware.jeb.core.units import IUnit, IXmlUnit
 from com.pnfsoftware.jeb.core.units.code.android import IDexUnit
 from com.pnfsoftware.jeb.core import RuntimeProjectUtil
 
-class Allatori(IScript):
+class JEBAllatori(IScript):
 
     def run(self, ctx):
         engctx = ctx.getEnginesContext()
@@ -24,7 +24,7 @@ class Allatori(IScript):
         
         fragment = ctx.getFocusedView().getActiveFragment()
         if not fragment:
-            print "Select a view and the string to de-obfuscate"
+            print "Select a view and the active fragment"
             return
         
         selectedstring = fragment.getActiveItemAsText()
@@ -50,7 +50,7 @@ class Allatori(IScript):
 
     def prepare_string(self, thestring):
         # Typically, you'll get this as input: '"T,Q0Z+QlT2ElT!A+Z,\u001B"'
-        # and what this as output: u'T,Q0Z+QlT2ElT!A+Z,\x1b'
+        # this outputs: u'T,Q0Z+QlT2ElT!A+Z,\x1b'
         
         # remove first and last quote
         l = len(thestring)
