@@ -10,3 +10,7 @@
 
 - ReplaceAllatori.py: replace the ALLATORIxDEMO obfuscated string
 - JEBAllatori.py: de-obfuscation but not replacing
+
+## NFC Glucose sensor tools
+
+See ./glucose-tools directory
