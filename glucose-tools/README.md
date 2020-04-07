@@ -9,5 +9,5 @@
 
 **Screenshot**
 
-![](./examples/screenshot-memory.png){ width=50% }
+![](./examples/screenshot-memory.png)
 
