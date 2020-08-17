@@ -14,3 +14,7 @@
 ## NFC Glucose sensor tools
 
 See ./glucose-tools directory
+
+## Android/SpyAgent reverse engineering
+
+- spyserv.py: Dummy server to display uncompressed messages for Android malware for malware sha256: `885d07d1532dcce08ae8e0751793ec30ed0152eee3c1321e2d051b2f0e3fa3d7`
