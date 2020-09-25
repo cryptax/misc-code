@@ -53,10 +53,10 @@ def get_status_indicator(dump):
         return "Invalid"
     return "Unknown"
 
-def get_expiration_indicator(dump):
+def get_activity_switch(dump):
     if dump[5] == 0x01:
-        return "Alive"
-    return "Expired"
+        return "Active"
+    return "Inactive"
 
 def get_trend_index(dump):
     return dump[26]
@@ -82,8 +82,10 @@ def get_sensor_region(dump):
         return "Europe / UK"
     if dump[323] == 0x2:
         return "US"
+    if dump[323] == 0x4:
+        return "New Zealand"
     if dump[323] == 0x8:
-        return "Israel"
+        return "Israel / Asia"
 
 def get_header_checksum(dump):
     return dump[0:2]
@@ -235,10 +237,10 @@ def display(dump):
 def print_crc(label, crc_read, data):
     crc_computed = computeSensorCrc(data).to_bytes(2, byteorder='little')
 
-    print("{0:20.20}: read={1} computed={2}".format(label, crc_read.hex(), crc_computed.hex()), end='')
+    print("{0:20.20}: read={1} computed={2}".format(label, bytearray(crc_read).hex(), bytearray(crc_computed).hex()), end='')
 
-    if crc_read == crc_computed:
-        print(" OK")
+    if bytearray(crc_read).hex() == bytearray(crc_computed).hex():
+        print("\033[1;32;1m OK\033[0m")
     else:
         print("\033[1;31;1m ERROR: CRC does not match\033[0m")
     
@@ -251,7 +253,7 @@ if __name__ == "__main__":
     print("---")
 
     status_indicator = get_status_indicator(dump)
-    expiration_indicator = get_expiration_indicator(dump)
+    expiration_indicator = get_activity_switch(dump)
     print("{0:20.20}: {1}".format('Status indicator', status_indicator))
     print("{0:20.20}: {1}".format('Expiration indicator', expiration_indicator))
 
