@@ -11,6 +11,10 @@
 - ReplaceAllatori.py: replace the ALLATORIxDEMO obfuscated string
 - JEBAllatori.py: de-obfuscation but not replacing
 
+## c1dd9c26671fddc83c9923493236d210d7461b29dd066f743bd4794c1d647549 (malicious Tous Anti Covid)
+
+- tous_anti.py: decrypt selected Base64+encrypted strings and put the result as comment
+
 ## Android reverse engineering (general)
 
 - b64script.py: decode selected Base64 strings and put the result as comment
