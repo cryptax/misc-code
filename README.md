@@ -1,5 +1,9 @@
 # Miscellaenous code
 
+## Android/Flubot reverse engineering
+
+- `CryptaxRocks.java`: string de-obfuscation
+
 ## Android/Ztorg reverse engineering
 
 - string-decode.py: standalone Python script to de-obfuscate Ztorg strings
