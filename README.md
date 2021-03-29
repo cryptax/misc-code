@@ -1,8 +1,11 @@
 # Miscellaenous code
 
-## Android/Flubot reverse engineering
+## Android/Flubot v3.6/v3.7 reverse engineering
 
-- `CryptaxRocks.java`: string de-obfuscation
+- `./flubot/CryptaxRocks.java`: string de-obfuscation
+- `./flubot/flubot.js`: Frida hook to display plaintext communication with C&C
+- `./frida-hook/michaelrocks.js`: Frida hook to display de-obfuscated strings
+- `./flubot/DGA.java`: standalone implementation of Flubot's DGA algorithm 
 
 ## Android/Ztorg reverse engineering
 
