@@ -22,6 +22,12 @@
 
 - tous_anti.py: decrypt selected Base64+encrypted strings and put the result as comment
 
+## Android/Alien reverse engineering
+
+- aka Bankbot
+- sha256: `ec3a10b4f38b45b7551807ba4342b111772c712c198e6a1a971dd043020f39a2`
+- De-obfuscate strings: `AlienBankbotDecrypt.py`. Script for JEB4.
+
 ## Android reverse engineering (general)
 
 - b64script.py: decode selected Base64 strings and put the result as comment
