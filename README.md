@@ -39,3 +39,6 @@ See ./glucose-tools directory
 ## Android/SpyAgent reverse engineering
 
 - spyserv.py: Dummy server to display uncompressed messages for Android malware for malware sha256: `885d07d1532dcce08ae8e0751793ec30ed0152eee3c1321e2d051b2f0e3fa3d7`
+## Android/Oji.G!worm
+
+- `grab-oji.py`: Script to automatically grab fresh samples. This can be used to upload the samples to your favorite malware database for detection. Works as of May 7, 2021.
