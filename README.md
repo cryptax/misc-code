@@ -42,3 +42,9 @@ See ./glucose-tools directory
 ## Android/Oji.G!worm
 
 - `grab-oji.py`: Script to automatically grab fresh samples. This can be used to upload the samples to your favorite malware database for detection. Works as of May 7, 2021.
+
+## Android/MoqHao
+
+Malware sha256: `aad80d2ad20fe318f19b6197b76937bf7177dbb1746b7849dd7f05aab84e6724`
+
+- `MoqHaoUnpacker.java`: program to unpack the sample. Provide as argument the encrypted asset. e.g. `efl15a`
