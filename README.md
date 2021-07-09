@@ -48,3 +48,9 @@ See ./glucose-tools directory
 Malware sha256: `aad80d2ad20fe318f19b6197b76937bf7177dbb1746b7849dd7f05aab84e6724`
 
 - `MoqHaoUnpacker.java`: program to unpack the sample. Provide as argument the encrypted asset. e.g. `efl15a`
+
+## Android/Bahamut
+
+Malware sha256: `fd1aac87399ad22234c503d8adb2ae9f0d950b6edf4456b1515a30100b5656a7`
+
+- `bahamutDecrypt.py`: decrypts files or strings encrypted by the malware
