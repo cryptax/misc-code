@@ -54,3 +54,10 @@ Malware sha256: `aad80d2ad20fe318f19b6197b76937bf7177dbb1746b7849dd7f05aab84e672
 Malware sha256: `fd1aac87399ad22234c503d8adb2ae9f0d950b6edf4456b1515a30100b5656a7`
 
 - `bahamutDecrypt.py`: decrypts files or strings encrypted by the malware
+
+
+## Android/ CHECKING THE NAME
+
+Malware sha256: `5b9049c392eaf83b12b98419f14ece1b00042592b003a17e4e6f0fb466281368`
+
+- `UnpackJwi.java`: unpacks the encrypted asset file
