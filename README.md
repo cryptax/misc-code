@@ -61,4 +61,4 @@ Malware sha256: `fd1aac87399ad22234c503d8adb2ae9f0d950b6edf4456b1515a30100b5656a
 Malware sha256: `5b9049c392eaf83b12b98419f14ece1b00042592b003a17e4e6f0fb466281368`
 
 - [UnpackJwi.java](https://github.com/cryptax/misc-code/blob/master/bianlian/UnpackJwi.java): unpacks the encrypted asset file
-- [fakebianserver](https://github.com/cryptax/misc-code/blob/master/bianlian/fakebianserver.py): fake C&C
+- [fakebianserver](https://github.com/cryptax/misc-code/blob/master/bianlian/fakebianserver.py): fake C&C template
