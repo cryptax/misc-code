@@ -63,8 +63,6 @@ public class UnpackTousAntiCovid {
         char v12 = keychars[10];
         char v13 = keychars[11];
 
-	/* see com.brazzers.naughty.k.a() -- remove junk code */
-
 	byte[] buf = new byte[0x2000];
 	int pos = 0;
 	int i = pos;
