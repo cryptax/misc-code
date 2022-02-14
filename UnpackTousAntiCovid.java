@@ -116,7 +116,7 @@ public class UnpackTousAntiCovid {
 	    String asset = "cls-v1.mz";
 	    String output_name = "unpacked.zip";
 	    
-	    UnpackJwi.unpack_asset(key, asset, output_name);
+	    UnpackTousAntiCovid.unpack_asset(key, asset, output_name);
 	}
 	catch (Exception exp){
 	    System.out.println("main(): Exception occurred: "+ exp.toString());
