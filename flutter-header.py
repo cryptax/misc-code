@@ -79,14 +79,14 @@ class Snapshot:
     @staticmethod
     def reverse_version(snapshot_version):
         # to do: add more from https://github.com/mildsunrise/darter/blob/master/info/versions.md
-        version_table = {'3318fe66091c0ffbb64faec39976cb7d': '2.9.0 -> 0.1pre',
+        version_table = {'e4a09dbf2bb120fe4674e0576617a0dc': '2.13',
+                          '3318fe66091c0ffbb64faec39976cb7d': '2.9.0 -> 0.1pre',
                          'adf563436d12ba0d50ea5beb7f3be1bb': '2.8.0 -> 2.8.1',
                          '24d9d411c2f90c8fbe8907f99e89d4b0': '2.7.0',
                          '9cf77f4405212c45daf608e1cd646852': '2.5.0 -> 2.5.3',
                          'f10776149bf76be288def3c2ca73bdc1': '2.6.0 -> 5.2pre',
                          '659a72e41e3276e882709901c27de33d': '2.4.0',
                          '7a5b240780941844bae88eca5dbaa7b8': '2.3.0 -> 2.4.1.pre',
-                         'e4a09dbf2bb120fe4674e0576617a0dc': '2.2.0-10.3pre -> 2.2.3',
                          '34f6eec64e9371856eaaa278ccf56538': '2.2.0-10.1.pre',
                          '5b97292b25f0a715613b7a28e0734f77': '2.0.6',
                          '9e2165577cef0f0f70f9ff072107920c': '1.25.0',
