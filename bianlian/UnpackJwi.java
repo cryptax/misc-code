@@ -114,7 +114,7 @@ public class UnpackJwi {
 	
 	try {
 	    String key = "GIUh9JHGUIGIUHGokfewrofij58YV6UhYUF7gjhgv";
-	    String asset = "G9ugwFtIG1.jwi";
+	    String asset = "7pjwG78hg1.6t8";
 	    String output_name = "unpacked.zip";
 	    
 	    UnpackJwi.unpack_asset(key, asset, output_name);
