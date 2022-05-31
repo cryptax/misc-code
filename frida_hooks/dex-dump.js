@@ -1,5 +1,7 @@
 'use strict';
-
+// https://xiphiasilver.net/how-to-copy-files-directly-on-frida/
+// https://frida.re/docs/javascript-api/#arraybuffer
+// https://github.com/eybisi/nwaystounpackmobilemalware/blob/master/dereflect.js
 console.log("[*] DexClassLoader Dump v0.1 - buggy - @cryptax");
 
 Java.perform(function () {
