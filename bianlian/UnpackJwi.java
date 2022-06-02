@@ -12,14 +12,12 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 
 /**
- * This program unpacks malicious sample 
+ * This program unpacks some specific malicious samples
  * SHA256: 5b9049c392eaf83b12b98419f14ece1b00042592b003a17e4e6f0fb466281368
+ * SHA256: 5e9f31ecca447ff0fa9ea0d1245c938dcd4191b6944f161e35a0d27aa41b102f
  *
- * In this sample, a packed DEX is included in ./assets/7G8Uwty/G9ugwFtIG1.jwi
- * in an "encrypted" format
- * 
- * Get the jwi file and put it in the same dir as this program (or customize the program :)
- * run and retrieve the unpacked DEX for analysis :)
+ * In those samples, a packed DEX is included in an ./assets subfolder and 
+ * can be decrypted using the reversed algo below + a key
  *
  * NB. This is crappy Java code, with some parts copied from disassembly. Sorry.
  *
@@ -27,7 +25,7 @@ import java.io.FileNotFoundException;
  * @cryptax
  * Kudos to @U039b and @0xabc0
  *
- * How to use:
+ * How to use for  5b9049c392eaf83b12b98419f14ece1b00042592b003a17e4e6f0fb466281368
  *
  * javac UnpackJwi.java
  * cp ./assets/7G8Uwty/G9ugwFtIG1.jwi .
@@ -113,8 +111,17 @@ public class UnpackJwi {
 	System.out.println("-----==== UnpackJwi ====-----");
 	
 	try {
+		/*
+		For 5b9049c392eaf83b12b98419f14ece1b00042592b003a17e4e6f0fb466281368
 	    String key = "GIUh9JHGUIGIUHGokfewrofij58YV6UhYUF7gjhgv";
 	    String asset = "7pjwG78hg1.6t8";
+
+		For 5e9f31ecca447ff0fa9ea0d1245c938dcd4191b6944f161e35a0d27aa41b102f
+		get the encrypted dex in assets/usvghlg/fzvoltxzb1.iuw
+		*/
+
+		String key = "PRO358HufnfnreIUVYV6U";
+		String asset = "fzvoltxzb1.iuw";
 	    String output_name = "unpacked.zip";
 	    
 	    UnpackJwi.unpack_asset(key, asset, output_name);
