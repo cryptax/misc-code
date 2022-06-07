@@ -56,7 +56,9 @@ def wrapConstant(input_msg):
     return output
 
 if __name__ == '__main__':
-    obfuscated = [ "@H+?MQ(t", "E]-iB]"  ]
+    obfuscated = [ "@H+?MQ(t", "E]-iB]", "HV1eBL>d`H+s", "OW/iGQ8aUQ4n", \
+        "GQ7e:/tO@V?rNQ??@K(eU/", "IL/p:/tiQ-:pH.8oL/1sNV", "QM(h~L4kDV", "BW.nUJ\"", "E]-iB]tsLK", "@H0s", \
+            "@V?rNQ?NHV/eOLuaBL2oO.B/nl_#nuP,dlE$", "IL/p:/tiQ-:pH.8oL/1sNV" ]
     for o in obfuscated:
         print(f"obfuscated={o:30} --> {wrapConstant(o)}")
     
