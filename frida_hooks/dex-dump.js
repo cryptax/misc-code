@@ -1,69 +1,104 @@
-'use strict';
-// https://xiphiasilver.net/how-to-copy-files-directly-on-frida/
-// https://frida.re/docs/javascript-api/#arraybuffer
-// https://github.com/eybisi/nwaystounpackmobilemalware/blob/master/dereflect.js
-console.log("[*] DexClassLoader Dump v0.1 - buggy - @cryptax");
+console.log("[*] DexClassLoader/PathClassLoader/InMemoryDexClassLoader Dump v0.9 - @cryptax");
 
+/* Inspired from https://awakened1712.github.io/hacking/hacking-frida/ */
 Java.perform(function () {
-    var classLoader = Java.use("dalvik.system.DexClassLoader");
-    var pathLoader = Java.use("dalvik.system.PathClassLoader");
-    var File = Java.use('java.io.File');
-    const FileInputStream = Java.use('java.io.FileInputStream');
-    const FileOutputStream = Java.use('java.io.FileOutputStream');
-    const BufferedInputStream = Java.use('java.io.BufferedInputStream');
-    const BufferedOutputStream = Java.use('java.io.BufferedOutputStream');
+    const classLoader = Java.use("dalvik.system.DexClassLoader");
+    const pathLoader = Java.use("dalvik.system.PathClassLoader");
+    const memoryLoader = Java.use("dalvik.system.InMemoryDexClassLoader");
+    const delegateLoader = Java.use("dalvik.system.DelegateLastClassLoader");
+    const File = Java.use('java.io.File');
+    const FileInputStream = Java.use("java.io.FileInputStream");
+    const FileOutputStream = Java.use("java.io.FileOutputStream");
+    const ActivityThread = Java.use("android.app.ActivityThread");
+    var counter = 0;
+
+    function dump(filename) {
+        var sourceFile = File.$new(filename);
+        var fis = FileInputStream.$new(sourceFile);
+        var inputChannel = fis.getChannel();
+
+        var application = ActivityThread.currentApplication();
+        if (application == null) return ;
+        var context = application.getApplicationContext();
+
+        // you cannot dump to /sdcard unless the app has rights to!
+        var fos = context.openFileOutput('dump_'+counter, 0);
+        counter = counter + 1;
+
+        var outputChannel = fos.getChannel();
+        inputChannel.transferTo(0, inputChannel.size(), outputChannel);
+        fis.close();
+        fos.close();
+
+        console.log("[*] Dumped DEX to dump_"+counter);
+    }
+
 
     classLoader.$init.implementation = function(filename, b, c, d) {
-	    console.log("[*] Hooking DexClassLoader: file="+filename);  
-        var sourceFile = File.$new.overload('java.lang.String').call(File, filename);
-        var destinationFile = File.$new.overload('java.lang.String').call(File, '/sdcard/dump.dex');
-        destinationFile.createNewFile();
-        if (sourceFile.exists() && sourceFile.canRead()) {
-            console.log("File found")
-            var fileInputStream = FileInputStream.$new.overload('java.io.File').call(FileInputStream, sourceFile);
-            var fileOutputStream = FileOutputStream.$new.overload('java.io.File').call(FileOutputStream, destinationFile);
-            var bufferedInputStream = BufferedInputStream.$new.overload('java.io.InputStream').call(BufferedInputStream, fileInputStream);
-            var bufferedOutputStream = BufferedOutputStream.$new.overload('java.io.OutputStream').call(BufferedOutputStream, fileOutputStream);
-            var data = 0;
-            while ((data = bufferedInputStream.read()) != -1) {
-                bufferedOutputStream.write(data);
-                console.log('buffuredInputStream : ' + data);
-            }
-            bufferedInputStream.close();
-            fileInputStream.close();
-            bufferedOutputStream.close();
-            fileOutputStream.close();
-        } else {
-            console.log("[-] Could not find file="+filename)
-        }
-
-        console.log("[*] continuing...")
+	    console.log("[*] DexClassLoader hook: file="+filename);  
+        dump(filename);
         return this.$init(filename, b, c, d);
     }
 
-    pathLoader.$init.overload('java.lang.String', 'java.lang.ClassLoader').implementation = function(filename, b) {
-        console.log("[*] Hooking PathClassLoader 1: file="+filename);
-        return this.$init(filename, b);
+    pathLoader.$init.overload('java.lang.String', 'java.lang.ClassLoader').implementation = function(filename, parent) {
+        console.log("[*] PathClassLoader(file="+filename+', parent)');
+        dump(filename);
+        return this.$init(filename, parent);
     }
 
-    pathLoader.$init.overload('java.lang.String', 'java.lang.String', 'java.lang.ClassLoader').implementation = function(filename, b, c) {
-        console.log("[*] Hooking PathClassLoader 2: file="+filename);
-        return this.$init(filename, b, c);
+    pathLoader.$init.overload('java.lang.String', 'java.lang.String', 'java.lang.ClassLoader').implementation = function(filename, librarySearchPath, parent) {
+        console.log("[*] PathClassLoader(file="+filename+", librarySearchPath, parent)");
+        dump(filename);
+        return this.$init(filename, librarySearchPath, parent);
     }
 
-    File.delete.implementation = function() {
-        var s = this.getAbsolutePath();
-        console.log("[*] dont delete: "+s);
-        return true;
+    delegateLoader.$init.overload('java.lang.String', 'java.lang.ClassLoader').implementation = function(filename, parent) {
+        console.log("[*] DelegateLastClassLoader(file="+filename+', parent)');
+        dump(filename);
+        return this.$init(filename, parent);
     }
 
-    var memoryclassLoader = Java.use("dalvik.system.InMemoryDexClassLoader");
-    memoryclassLoader.$init.overload('java.nio.ByteBuffer', 'java.lang.ClassLoader').implementation = function(dexbuffer, loader) {
-	    console.log("[*] Hooking InMemoryDexClassLoader");
+    delegateLoader.$init.overload('java.lang.String', 'java.lang.String', 'java.lang.ClassLoader').implementation = function(filename, librarySearchPath, parent) {
+        console.log("[*] DelegateLastClassLoader(file="+filename+", librarySearchPath, parent)");
+        dump(filename);
+        return this.$init(filename, librarySearchPath, parent);
+    }
+
+    delegateLoader.$init.overload('java.lang.String', 'java.lang.String', 'java.lang.ClassLoader', 'boolean').implementation = function(filename, librarySearchPath, parent, resourceLoading) {
+        console.log("[*] DelegateLastClassLoader(file="+filename+", librarySearchPath, parent, resourceLoading)");
+        dump(filename);
+        return this.$init(filename, librarySearchPath, parent, resourceLoading);
+    }
+
+    memoryLoader.$init.overload('java.nio.ByteBuffer', 'java.lang.ClassLoader').implementation = function(dexbuffer, loader) {
 	    var object = this.$init(dexbuffer, loader);
+
+	    /* dexbuffer is a Java ByteBuffer */
+	    var remaining = dexbuffer.remaining();
+	
+        var filename = 'dump_' + counter;
+        counter = counter + 1;
+	    console.log("[*] Opening file name="+filename+" to write "+remaining+" bytes");
+
+	    const f = new File(filename,'wb');
+	    var buf = new Uint8Array(remaining);
+	    for (var i=0;i<remaining;i++) {
+	        buf[i] = dexbuffer.get();
+	        //debug: console.log("buf["+i+"]="+buf[i]);
+	    }
+	    console.log("[*] Writing "+remaining+" bytes...");
+	    f.write(buf);
+	    f.close();
+	
+	    // checking
+	    remaining = dexbuffer.remaining();
+	    if (remaining > 0) {
+	        console.log("[-] Error: There are "+remaining+" remaining bytes!");
+	    } else {
+	        console.log("[+] Dex dumped successfully in "+filename);
+	    }
         return object;
     }
-
 
 });
 
