@@ -62,3 +62,9 @@ Malware sha256: `5b9049c392eaf83b12b98419f14ece1b00042592b003a17e4e6f0fb46628136
 
 - [UnpackJwi.java](https://github.com/cryptax/misc-code/blob/master/bianlian/UnpackJwi.java): unpacks the encrypted asset file
 - [fakebianserver](https://github.com/cryptax/misc-code/blob/master/bianlian/fakebianserver.py): fake C&C template
+
+## Android/Joker
+
+Malware sha256: `afeb6efad25ed7bf1bc183c19ab5b59ccf799d46e620a5d1257d32669bedff6f`
+
+- `JokerDecryptPBE.java`
