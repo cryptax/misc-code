@@ -62,7 +62,11 @@ Malware sha256: `5b9049c392eaf83b12b98419f14ece1b00042592b003a17e4e6f0fb46628136
 
 - [UnpackJwi.java](https://github.com/cryptax/misc-code/blob/master/bianlian/UnpackJwi.java): unpacks the encrypted asset file
 - [fakebianserver](https://github.com/cryptax/misc-code/blob/master/bianlian/fakebianserver.py): fake C&C template
+
+## JsonPacker
+
 - [jsondecrypt.py](https://github.com/cryptax/misc-code/blob/master/bianlian/jsondecrypt.py): unpacked JsonPacked asset file, provided you know the short key.
+- Same, but Java implementation
 
 ## Android/Joker
 
