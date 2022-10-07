@@ -64,7 +64,7 @@ class Snapshot:
             self.kind = SnapshotKindEnum.kInvalid
         else:
             self.kind = SnapshotKindEnum(kind[0])
-        self.version_hash = self.buf[0x6004 + 8 + 8:0x6004 + 8 + 8 + 32].decode('ascii')
+        self.version_hash = self.buf[self.offset + 8 + 8:self.offset + 8 + 8 + 32].decode('ascii')
         self.version = self.reverse_version(self.version_hash)
 
         # features is a null terminated string
