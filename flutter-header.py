@@ -64,7 +64,7 @@ class Snapshot:
             self.kind = SnapshotKindEnum.kInvalid
         else:
             self.kind = SnapshotKindEnum(kind[0])
-        self.version_hash = self.buf[self.offset + 8 + 8:self.offset + 8 + 8 + 32].decode('ascii')
+        self.version_hash = self.buf[self.offset + 4 + 8 + 8:self.offset + 4 + 8 + 8 + 32].decode('ascii')
         self.version = self.reverse_version(self.version_hash)
 
         # features is a null terminated string
@@ -80,7 +80,7 @@ class Snapshot:
     def reverse_version(snapshot_version):
         # to do: add more from https://github.com/mildsunrise/darter/blob/master/info/versions.md
         version_table = {'e4a09dbf2bb120fe4674e0576617a0dc': '2.13',
-                          '3318fe66091c0ffbb64faec39976cb7d': '2.9.0 -> 0.1pre',
+                         '3318fe66091c0ffbb64faec39976cb7d': '2.9.0 -> 0.1pre',
                          'adf563436d12ba0d50ea5beb7f3be1bb': '2.8.0 -> 2.8.1',
                          '24d9d411c2f90c8fbe8907f99e89d4b0': '2.7.0',
                          '9cf77f4405212c45daf608e1cd646852': '2.5.0 -> 2.5.3',
@@ -95,6 +95,7 @@ class Snapshot:
                          '8ee4ef7a67df9845fba331734198a953': '1.22.1 -> 1.22.6',
                          '04645b6182fad3d68350d84669869ce5': '1.20.0 -> 1.20.4',
                          '5f40b0a9f04b5018fa08a9b67fd316cd': '1.21.0',
+                         'b0e899ec5a90e4661501f0b69e9dd70f': '3.3.4'
                          }
         if snapshot_version in version_table:
             return version_table[snapshot_version]
