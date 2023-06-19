@@ -73,3 +73,13 @@ Malware sha256: `5b9049c392eaf83b12b98419f14ece1b00042592b003a17e4e6f0fb46628136
 Malware sha256: `afeb6efad25ed7bf1bc183c19ab5b59ccf799d46e620a5d1257d32669bedff6f`
 
 - `JokerDecryptPBE.java`
+
+## KangaPack
+
+- Unpacker: `kangaunpack.py`
+- Malware sha256: `2c05efa757744cb01346fe6b39e9ef8ea2582d27481a441eb885c5c4dcd2b65b`
+
+## Flutter
+
+- Radare 2 plugin to process byte arrays
+- Python script to parse Flutter AOT headers
