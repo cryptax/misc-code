@@ -97,7 +97,8 @@ class Snapshot:
                          '8ee4ef7a67df9845fba331734198a953': '1.22.1 -> 1.22.6',
                          '04645b6182fad3d68350d84669869ce5': '1.20.0 -> 1.20.4',
                          '5f40b0a9f04b5018fa08a9b67fd316cd': '1.21.0',
-                         'b0e899ec5a90e4661501f0b69e9dd70f': '3.3.4'
+                         'b0e899ec5a90e4661501f0b69e9dd70f': '3.3.4',
+                         '90b56a561f70cd55e972cb49b79b3d8b' : '?'
                          }
         if snapshot_version in version_table:
             return version_table[snapshot_version]
