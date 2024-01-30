@@ -79,6 +79,8 @@ class Snapshot:
     @staticmethod
     def reverse_version(snapshot_version):
         # to do: add more from https://github.com/mildsunrise/darter/blob/master/info/versions.md
+        # to do: add more from https://gist.github.com/nfalliere/84803aef37291ce225e3549f3773681b
+        # to do: fix inconsistencies: some versions are Flutter versions, while other are Dart versions...
         version_table = {'adb4292f3ec25074ca70abcd2d5c7251': '2.19.1',
                          'b0e899ec5a90e4661501f0b69e9dd70f': '2.18.0',
                          'e4a09dbf2bb120fe4674e0576617a0dc': '2.13',
