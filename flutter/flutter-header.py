@@ -81,7 +81,9 @@ class Snapshot:
         # to do: add more from https://github.com/mildsunrise/darter/blob/master/info/versions.md
         # to do: add more from https://gist.github.com/nfalliere/84803aef37291ce225e3549f3773681b
         # to do: fix inconsistencies: some versions are Flutter versions, while other are Dart versions...
-        version_table = {'adb4292f3ec25074ca70abcd2d5c7251': '2.19.1',
+        # list here: https://storage.googleapis.com/flutter_infra_release/releases/releases_linux.json
+        version_table = {'f71c76320d35b65f1164dbaa6d95fe09' : '3.2.6',
+            'adb4292f3ec25074ca70abcd2d5c7251': '2.19.1',
                          'b0e899ec5a90e4661501f0b69e9dd70f': '2.18.0',
                          'e4a09dbf2bb120fe4674e0576617a0dc': '2.13',
                          '3318fe66091c0ffbb64faec39976cb7d': '2.9.0 -> 0.1pre',
@@ -307,7 +309,7 @@ class Snapshot:
                          }
         if snapshot_version in version_table:
             return version_table[snapshot_version]
-        return 'Unknown'
+        return snapshot_version
 
 
 def get_arguments():
