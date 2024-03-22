@@ -35,13 +35,13 @@ class Libapp:
 
 
 class SnapshotKindEnum(Enum):
-    # See https://github.com/dart-lang/sdk/blob/7c148d029de32590a8d0d332bf807d25929f080e/runtime/vm/snapshot.h
+    # See https://github.com/dart-lang/sdk/blob/main/runtime/vm/snapshot.h
     kFull = 0  # Full snapshot of core libraries or an application.
-    kFullJIT = 1  # Full + JIT code
-    kFullAOT = 2  # Full + AOT code
-    kMessage = 3  # A partial snapshot used only for isolate messaging.
+    kFullCore = 1 # Full snapshot of core libraries. Agnostic to null safety.
+    kFullJIT = 2  # Full + JIT code
+    kFullAOT = 3  # Full + AOT code
     kNone = 4  # gen_snapshot
-    kInvalid = 5
+    kInvalid = 5 
 
 
 class Snapshot:
@@ -57,11 +57,14 @@ class Snapshot:
     def parse_snapshot(self):
         # skip magic (4 bytes)
         # see https://blog.tst.sh/reverse-engineering-flutter-apps-part-1/
+        # u64 size
         self.size = unpack('<q', self.buf[self.offset + 4:self.offset + 4 + 8])[0]
+        # u64 kind
         kind = unpack('<q', self.buf[self.offset + 4 + 8:self.offset + 4 + 8 + 8])
         if kind is None or kind[0] < 0 or kind[0] > 5:
             logging.error(f"Unknown snapshot Kind: {kind} (snapshot offset={self.offset})")
             self.kind = SnapshotKindEnum.kInvalid
+        else:
             self.kind = SnapshotKindEnum(kind[0])
         self.version_hash = self.buf[self.offset + 4 + 8 + 8:self.offset + 4 + 8 + 8 + 32].decode('ascii')
         self.version = self.reverse_version(self.version_hash)
