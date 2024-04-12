@@ -23,21 +23,25 @@ class DartBytes(IScript):
 
         # get current method
         method_addr = fragment.getActiveAddress()
+        print('Active address: %s' % (method_addr))
         pos = method_addr.find('+')
         if pos >= 0:
             method_addr = method_addr[:pos]
         method = unit.getMethod(method_addr)
-        for i in method.getInstructions():
-            current_inst = i.format(ctx)
-            if re.search('mov *r.*, *[A-F0-9]*h', current_inst) is not None:
-                try:
-                    literal = re.search('[A-F0-9]*h', current_inst).group(0)[:-1]
-                    value = chr(int(literal, 16) // 2)
-                    print('Loading %s' % value)
-                    previous_comment = unit.getFullComment(method_addr)
-                    unit.setPrimaryComment(method_addr, '%s%c' % (previous_comment, value))
-                except ValueError:
-                    print('Error for instruction: %s' % current_inst)
+        if method is None:
+            print('No method selected (%s). Please select a method.' % (method_addr))
+        else:
+            for i in method.getInstructions():
+                current_inst = i.format(ctx)
+                if re.search('mov *r.*, *[A-F0-9]*h', current_inst) is not None:
+                    try:
+                        literal = re.search('[A-F0-9]*h', current_inst).group(0)[:-1]
+                        value = chr(int(literal, 16) // 2)
+                        print('Loading: %s' % value)
+                        previous_comment = unit.getFullComment(method_addr)
+                        unit.setPrimaryComment(method_addr, '%s%c' % (previous_comment, value))
+                    except ValueError:
+                        print('Error for instruction: %s' % current_inst)
                 
                 
                 
