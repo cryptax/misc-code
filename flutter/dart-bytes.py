@@ -5,7 +5,12 @@ import sys
 '''
 Helper r2pipe script for Radare2 to display useful comment to Dart byte array loading
 @cryptax - June 19, 2023
-Launch it with #!pipe python3 ./dart-bytes.py
+
+Launch it:
+[0x00096b3c]> #!pipe
+pipe> python3 ./dart-bytes.py 0x00096b52 0x00096b83
+Dart Bytes R2Pipe Script
+pipe> q
 '''
 
 class R2DartBytes:
@@ -28,7 +33,7 @@ class R2DartBytes:
             if re.search('mov r11d, 0x[a-f0-9]*$', line['disasm']) is not None:
                 hexliteral = line['disasm'].split(',')[-1].strip().replace('0x','')
                 value = int(hexliteral, 16) // 2
-                comment = 'Load 0x%02x (character="%c")' % (value, chr(value))
+                comment = 'Load 0x%02x (decimal=%d, character="%c")' % (value, value, chr(value))
                 if self.verbose:
                     print(comment)
                 self.r2.cmd("CC %s @ %d" % (comment, line['offset']))
