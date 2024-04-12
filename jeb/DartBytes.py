@@ -36,10 +36,14 @@ class DartBytes(IScript):
                 if re.search('mov *r.*, *[A-F0-9]*h', current_inst) is not None:
                     try:
                         literal = re.search('[A-F0-9]*h', current_inst).group(0)[:-1]
-                        value = chr(int(literal, 16) // 2)
-                        print('Loading: %s' % value)
+                        int_value = int(literal, 16) // 2
                         previous_comment = unit.getFullComment(method_addr)
-                        unit.setPrimaryComment(method_addr, '%s%c' % (previous_comment, value))
+                        if int_value >= 32 and int_value <= 126:
+                            # it's a printable character
+                            print("Loading: %c" % (chr(int_value)))
+                            unit.setPrimaryComment(method_addr, '%s%c' % (previous_comment, chr(int_value)))
+                        else:
+                            print("Loading 0x%02x" % (int_value))
                     except ValueError:
                         print('Error for instruction: %s' % current_inst)
                 
