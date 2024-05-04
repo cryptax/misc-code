@@ -5,9 +5,14 @@ in Object Pool of flutter libapp.so Aarch64
 Usage:
 ~ $ python ppSearch.py [-h] binary hex_value
 
-Where:
-binary: path/to/libapp.so
-hex_value: Dart Object value
+Search for specific patterns in a binary file.
+
+positional arguments:
+  binary      Path to the binary file
+  hex_value   Hex value to search
+
+options:
+  -h, --help  show this help message and exit
 
 Example:
 ~$ python ppSearch.py libapp.so 0x88f0
