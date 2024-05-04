@@ -5,8 +5,6 @@ in Object Pool of flutter libapp.so Aarch64
 Usage:
 ~ $ python ppSearch.py [-h] binary hex_value
 
-Search for specific patterns in a binary file.
-
 positional arguments:
   binary      Path to the binary file
   hex_value   Hex value to search
@@ -148,7 +146,7 @@ def main():
     start_time = time.time()
 
     parser = argparse.ArgumentParser(
-        description="Search for specific patterns in a binary file."
+        description="Search for Dart object uses in Object Pool of flutter libapp.so Aarch64."
     )
     parser.add_argument("binary", type=str, help="Path to the binary file")
     parser.add_argument("hex_value", type=str, help="Hex value to search")
