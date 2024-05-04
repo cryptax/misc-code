@@ -50,8 +50,6 @@ import importlib
 import subprocess
 import sys
 
-requirements_list = []
-
 
 def import_library(library_name: str, package_name: str = None):
     """
@@ -62,7 +60,6 @@ def import_library(library_name: str, package_name: str = None):
     """
     if package_name is None:
         package_name = library_name
-    requirements_list.append(package_name)
 
     try:
         return importlib.import_module(library_name)
