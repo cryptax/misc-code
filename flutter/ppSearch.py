@@ -158,8 +158,11 @@ def main():
     first_target = hex_value[0:-3]
     check_first = first_target.strip("0x")
 
+    values = ["a", "b", "c", "d", "e", "f"]
+
     if len(check_first) == 1:
-        first_target = check_first
+        if check_first not in values:
+            first_target = check_first
 
     if hex_value[-3:-1] =='00':
         second_target = hex_value[-1:]
