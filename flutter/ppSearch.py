@@ -1,5 +1,5 @@
 """
-Python script to print Dart object uses 
+Python script to print Dart object usages 
 in Object Pool of flutter libapp.so Aarch64
 
 Usage:
@@ -146,7 +146,7 @@ def main():
     start_time = time.time()
 
     parser = argparse.ArgumentParser(
-        description="Search for Dart object uses in Object Pool of flutter libapp.so Aarch64."
+        description="Search for Dart object usages in Object Pool of flutter libapp.so Aarch64."
     )
     parser.add_argument("binary", type=str, help="Path to the binary file")
     parser.add_argument("hex_value", type=str, help="Hex value to search")
