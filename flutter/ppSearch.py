@@ -161,7 +161,13 @@ def main():
     if len(check_first) == 1:
         first_target = check_first
 
-    second_target = "0x" + hex_value[-3:]
+    if hex_value[-3:-1] =='00':
+        second_target = hex_value[-1:]
+    elif hex_value[-3:-2] == '0':
+        second_target = '0x' + hex_value[-2:] 
+    else: 
+        second_target = '0x' + hex_value[-3:]
+
     print("The First Target is", first_target)
     print("The Second Target is", second_target)
     run_command(binary, first_target, second_target)
