@@ -83,4 +83,4 @@ Malware sha256: `afeb6efad25ed7bf1bc183c19ab5b59ccf799d46e620a5d1257d32669bedff6
 
 - Radare 2 plugin to process byte arrays
 - Python script to parse Flutter AOT headers
-- Python script to search for Dart object uses in Object Pool of flutter libapp.so Aarch64
+- Python script to search for Dart object usages in Object Pool of flutter libapp.so Aarch64
