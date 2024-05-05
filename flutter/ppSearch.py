@@ -97,7 +97,7 @@ def run_command(binary, first_target, second_target):
     """Running our r2pipe"""
     r2 = r2pipe.open(binary)
     cmd = r2.cmd(
-        f"/ad/a add.*, x27, {first_target}, lsl 12; ldr.*, [.*, {second_target}]"
+        f"/ad/ add.*, x27, {first_target}, lsl 12; ldr.*, [.*, {second_target}]"
     )
     with open("out.txt", "w") as file:
         file.write(cmd)
