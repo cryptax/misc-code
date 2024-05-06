@@ -1,5 +1,5 @@
 """
-Python script to print Dart object usages 
+Python script to print Dart object uses 
 in Object Pool of flutter libapp.so Aarch64
 
 Usage:
@@ -146,7 +146,7 @@ def main():
     start_time = time.time()
 
     parser = argparse.ArgumentParser(
-        description="Search for Dart object usages in Object Pool of flutter libapp.so Aarch64."
+        description="Search for Dart object uses in Object Pool of flutter libapp.so Aarch64."
     )
     parser.add_argument("binary", type=str, help="Path to the binary file")
     parser.add_argument("hex_value", type=str, help="Hex value to search")
@@ -156,13 +156,14 @@ def main():
     hex_value = args.hex_value
 
     first_target = hex_value[0:-3]
-    check_first = first_target.strip("0x")
 
-    values = ["a", "b", "c", "d", "e", "f"]
+    values = {"a", "b", "c", "d", "e", "f"}
 
-    if len(check_first) == 1:
-        if check_first not in values:
-            first_target = check_first
+    check_first = first_target.lstrip("0x")
+    check_first = check_first[1:] if check_first.startswith("0") else check_first
+
+    if len(check_first) == 1 and check_first not in values:
+        first_target = check_first
 
     if hex_value[-3:-1] =='00':
         second_target = hex_value[-1:]
@@ -170,13 +171,12 @@ def main():
         second_target = '0x' + hex_value[-2:] 
     else: 
         second_target = '0x' + hex_value[-3:]
-
-    print("The First Target is", first_target)
-    print("The Second Target is", second_target)
+    print("The First Target is:", first_target)
+    print("The Second Target is:", second_target)
     run_command(binary, first_target, second_target)
 
-    instr_pattern1 = re.compile(f"add\s+(\w+),\s+x27,\s+{first_target},\s+lsl\s+12")
-    instr_pattern2 = re.compile(f"ldr\s+([\w]+),\s+\[([\w]+),\s+{second_target}\]")
+    instr_pattern1 = re.compile(f"add\s+(x\d+),\s+x27,\s+{first_target},\s+lsl\s+12")
+    instr_pattern2 = re.compile(f"ldr\s+(x\d+),\s+\[(x\d+),\s+{second_target}\]")
 
     file_path = "result.txt"
     matches = search_patterns(file_path, instr_pattern1, instr_pattern2)
@@ -189,9 +189,8 @@ def main():
 
     end_time = time.time()
     execution_time = end_time - start_time
-    print(f"Script execution time: {execution_time} seconds")
+    print(f"Script execution time: {execution_time}:.2f seconds")
 
 
 if __name__ == "__main__":
     main()
-  
