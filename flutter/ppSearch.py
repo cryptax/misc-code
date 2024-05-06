@@ -1,5 +1,5 @@
 """
-Python script to print Dart object uses 
+Python script to print Dart object usages 
 in Object Pool of flutter libapp.so Aarch64
 
 Usage:
@@ -146,7 +146,7 @@ def main():
     start_time = time.time()
 
     parser = argparse.ArgumentParser(
-        description="Search for Dart object uses in Object Pool of flutter libapp.so Aarch64."
+        description="Search for Dart object usages in Object Pool of flutter libapp.so Aarch64."
     )
     parser.add_argument("binary", type=str, help="Path to the binary file")
     parser.add_argument("hex_value", type=str, help="Hex value to search")
@@ -165,12 +165,12 @@ def main():
     if len(check_first) == 1 and check_first not in values:
         first_target = check_first
 
-    if hex_value[-3:-1] =='00':
+    if hex_value[-3:-1] == "00":
         second_target = hex_value[-1:]
-    elif hex_value[-3:-2] == '0':
-        second_target = '0x' + hex_value[-2:] 
-    else: 
-        second_target = '0x' + hex_value[-3:]
+    elif hex_value[-3:-2] == "0":
+        second_target = "0x" + hex_value[-2:]
+    else:
+        second_target = "0x" + hex_value[-3:]
     print("The First Target is:", first_target)
     print("The Second Target is:", second_target)
     run_command(binary, first_target, second_target)
