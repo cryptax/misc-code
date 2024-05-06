@@ -93,12 +93,10 @@ def extract_addresses(file_path):
     return addresses
 
 
-def run_command(binary, first_target, second_target):
+def run_command(binary, instr_pattern1, instr_pattern2):
     """Running our r2pipe"""
     r2 = r2pipe.open(binary)
-    cmd = r2.cmd(
-        f"/ad/ add.*, x27, {first_target}, lsl 12; ldr.*, [.*, {second_target}]"
-    )
+    cmd = r2.cmd(f"/ad/ {instr_pattern1};{instr_pattern2}")
     with open("out.txt", "w") as file:
         file.write(cmd)
 
@@ -128,6 +126,9 @@ def search_patterns(file_path, pattern1, pattern2):
     Returns:
     - A list of matches found in the disassembly output.
     """
+    pattern1 = re.compile(pattern1)
+    pattern2 = re.compile(pattern2)
+
     with open(file_path, "r", encoding="utf-8") as file:
         lines = file.readlines()
 
@@ -173,23 +174,42 @@ def main():
         second_target = "0x" + hex_value[-3:]
     print("The First Target is:", first_target)
     print("The Second Target is:", second_target)
-    run_command(binary, first_target, second_target)
 
-    instr_pattern1 = re.compile(f"add\s+(x\d+),\s+x27,\s+{first_target},\s+lsl\s+12")
-    instr_pattern2 = re.compile(f"ldr\s+(x\d+),\s+\[(x\d+),\s+{second_target}\]")
+    instr_pattern1 = f"add\s+(x\d+),\s+x27,\s+{first_target},\s+lsl\s+12"
+    instr_pattern2 = f"ldr\s+(x\d+),\s+\[(x\d+),\s+{second_target}]"
+
+    run_command(binary, instr_pattern1, instr_pattern2)
 
     file_path = "result.txt"
+
     matches = search_patterns(file_path, instr_pattern1, instr_pattern2)
 
-    for match in matches:
-        print(f"{match[0]}{match[1]}\n")
+    if matches:
+        print(f"Found {len(matches)} direct matches:")
+        for match in matches:
+            print(f"{match[0]}{match[1]}\n")
 
     if os.path.exists("result.txt"):
         os.remove("result.txt")
 
+    isstring = input("Is your target Object a String? (y/n): ").lower()
+    if isstring == "y":
+        instr_pattern2 = "ldr\s+(x\d+),\s+\[(x\d+),\s+str._ParameterMirror]"
+        run_command(binary, instr_pattern1, instr_pattern2)
+        matches2 = search_patterns(file_path, instr_pattern1, instr_pattern2)
+        if matches2:
+            print(f"Found {len(matches2)} possible matches:")
+            for match in matches2:
+                print(f"{match[0]}{match[1]}\n")
+        if os.path.exists("result.txt"):
+            os.remove("result.txt")
+
+    if not matches and not matches2:
+        print("No matches found.")
+
     end_time = time.time()
     execution_time = end_time - start_time
-    print(f"Script execution time: {execution_time}:.2f seconds")
+    print(f"Script execution time: {execution_time:.2f} seconds")
 
 
 if __name__ == "__main__":
