@@ -95,7 +95,7 @@ def extract_addresses(file_path):
 
 def run_command(binary, instr_pattern1, instr_pattern2):
     """Running our r2pipe"""
-    r2 = r2pipe.open(binary)
+    r2 = r2pipe.open(binary, flags=['-z', '-e', 'log.quiet=true'])
     cmd = r2.cmd(f"/ad/ {instr_pattern1};{instr_pattern2}")
     with open("out.txt", "w") as file:
         file.write(cmd)
@@ -192,19 +192,7 @@ def main():
     if os.path.exists("result.txt"):
         os.remove("result.txt")
 
-    isstring = input("Is your target Object a String? (y/n): ").lower()
-    if isstring == "y":
-        instr_pattern2 = "ldr\s+(x\d+),\s+\[(x\d+),\s+str._ParameterMirror]"
-        run_command(binary, instr_pattern1, instr_pattern2)
-        matches2 = search_patterns(file_path, instr_pattern1, instr_pattern2)
-        if matches2:
-            print(f"Found {len(matches2)} possible matches:")
-            for match in matches2:
-                print(f"{match[0]}{match[1]}\n")
-        if os.path.exists("result.txt"):
-            os.remove("result.txt")
-
-    if not matches and not matches2:
+    if not matches:
         print("No matches found.")
 
     end_time = time.time()
