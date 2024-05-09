@@ -40,7 +40,6 @@ WARN: Relocs has not been applied. Please use `-e bin.relocs.apply=true` or `-e 
 Script execution time: 12.362151384353638 seconds
 """
 
-import os
 import re
 import time
 import argparse
@@ -75,45 +74,20 @@ def import_library(library_name: str, package_name: str = None):
 r2pipe = import_library("r2pipe")
 
 
-def extract_addresses(file_path):
-    """Get addresses"""
-    with open(file_path, "r") as file:
-        contents = file.read()
-
-    lines = contents.split("\n")
-
-    addresses = []
-
-    for line in lines:
-        if line.strip():
-            parts = line.split(" ", 1)
-            address = parts[0]
-            addresses.append(address)
-
-    return addresses
-
-
-def run_command(binary, instr_pattern1, instr_pattern2):
+def run_command(binary, first_target, second_target):
     """Running our r2pipe"""
-    r2 = r2pipe.open(binary, flags=['-z', '-e', 'log.quiet=true'])
-    cmd = r2.cmd(f"/ad/ {instr_pattern1};{instr_pattern2}")
-    with open("out.txt", "w") as file:
-        file.write(cmd)
-
-    file_path = "out.txt"
-    addresses = extract_addresses(file_path)
-    for address in addresses:
-        cmd2 = r2.cmd(f"s {address};pd3")
-        with open("result.txt", "a") as file:
-            file.write(cmd2)
-
-    if os.path.exists(file_path):
-        os.remove(file_path)
-
+    r2 = r2pipe.open(binary, flags=["-z", "-e", "log.quiet=true"])
+    output = ""
+    for line in r2.cmd(
+        f"/ad/ add.*, x27, {first_target}, lsl 12; .*, [.*, {second_target}]"
+    ).split("\n"):
+        if line.strip():
+            output += r2.cmd(f"s {line.split(' ')[0]};pd3")
     r2.quit()
+    return output.split("\n")
 
 
-def search_patterns(file_path, pattern1, pattern2):
+def search_patterns(output, pattern1, pattern2):
     """
     Searches for two specific instruction patterns
     in consecutive lines of a disassembly output file.
@@ -126,17 +100,11 @@ def search_patterns(file_path, pattern1, pattern2):
     Returns:
     - A list of matches found in the disassembly output.
     """
-    pattern1 = re.compile(pattern1)
-    pattern2 = re.compile(pattern2)
-
-    with open(file_path, "r", encoding="utf-8") as file:
-        lines = file.readlines()
-
     matches = []
 
-    for i in range(len(lines) - 1):  # -1 to avoid IndexError
-        if pattern1.search(lines[i]) and pattern2.search(lines[i + 1]):
-            matches.append((lines[i], lines[i + 1]))
+    for i in range(len(output) - 1):  # -1 to avoid IndexError
+        if pattern1.search(output[i]) and pattern2.search(output[i + 1]):
+            matches.append((output[i], output[i + 1]))
 
     return matches
 
@@ -175,22 +143,19 @@ def main():
     print("The First Target is:", first_target)
     print("The Second Target is:", second_target)
 
-    instr_pattern1 = f"add\s+(x\d+),\s+x27,\s+{first_target},\s+lsl\s+12"
-    instr_pattern2 = f"ldr\s+(x\d+),\s+\[(x\d+),\s+{second_target}]"
+    sys.stdout.write("Looking for matches..." + "\r")
 
-    run_command(binary, instr_pattern1, instr_pattern2)
+    output = run_command(binary, first_target, second_target)
 
-    file_path = "result.txt"
+    instr_pattern1 = re.compile(f"add\s+(x\d+),\s+x27,\s+{first_target},\s+lsl\s+12")
+    instr_pattern2 = re.compile(f"ldr\s+(x\d+),\s+\[(x\d+),\s+{second_target}]")
 
-    matches = search_patterns(file_path, instr_pattern1, instr_pattern2)
+    matches = search_patterns(output, instr_pattern1, instr_pattern2)
 
     if matches:
         print(f"Found {len(matches)} direct matches:")
         for match in matches:
-            print(f"{match[0]}{match[1]}\n")
-
-    if os.path.exists("result.txt"):
-        os.remove("result.txt")
+            print(f"{match[0]}\n{match[1]}\n")
 
     if not matches:
         print("No matches found.")
