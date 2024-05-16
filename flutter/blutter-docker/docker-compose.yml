@@ -1,0 +1,10 @@
+---
+services:
+  blutter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cryptax/blutter:2024.04
+    container_name: blutter
+    volumes:
+      - /tmp/blutter:/workdir
