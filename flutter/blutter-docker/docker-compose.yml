@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: cryptax/blutter:2024.04
+    image: cryptax/blutter:2024.07
     container_name: blutter
     volumes:
       - /tmp/blutter:/workdir
