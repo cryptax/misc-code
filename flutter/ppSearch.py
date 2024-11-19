@@ -223,8 +223,8 @@ def main():
 
     output = run_command(binary, first_target, second_target, fcn_addr=args.f)
 
-    instr_pattern1 = re.compile(f"add\s+(x\d+),\s+x27,\s+{first_target},\s+lsl\s+12")
-    instr_pattern2 = re.compile(f"ldr\s+(x\d+),\s+\[(x\d+),\s+{second_target}]")
+    instr_pattern1 = re.compile(f"add\\s+(x\d+),\\s+x27,\\s+{first_target},\\s+lsl\\s+12")
+    instr_pattern2 = re.compile(f"ldr\\s+(x\d+),\\s+\\[(x\\d+),\\s+{second_target}]")
 
     matches = search_patterns(output, instr_pattern1, instr_pattern2)
 
