@@ -139,7 +139,7 @@ def run_command(binary, first_target, second_target, fcn_addr=False):
         r2.cmd("aac")
     output = []
     for line in r2.cmd(
-        f"/ad/ add.*, x27, {first_target}, lsl 12; .*, [.*, {second_target}]"
+        f"/ad/ add.*, x27, {first_target}, lsl 12; .*, {second_target}"
     ).split("\n"):
         if line.strip():
             match_address = line.split(" ")[0]
@@ -155,7 +155,7 @@ def run_command(binary, first_target, second_target, fcn_addr=False):
     return output
 
 
-def search_patterns(output, pattern1, pattern2):
+def search_patterns(output, pattern1, pattern2, pattern3):
     """
     Searches for two specific instruction patterns
     in consecutive lines of a disasm output file.
@@ -164,6 +164,7 @@ def search_patterns(output, pattern1, pattern2):
     :param file_path: Path to the disasm output file.
     :param pattern1: A regular expression pattern to match the first instruction.
     :param pattern2: A regular expression pattern to match the second instruction.
+    :param pattern3: A regular expression pattern to match the second instruction if pattern2 not found.
 
     Returns:
     - A list of matches found in the disasm output.
@@ -172,8 +173,17 @@ def search_patterns(output, pattern1, pattern2):
     for func_addr, disasm in output:
         lines = disasm.split("\n")
         for i in range(len(lines) - 1):  # -1 to avoid IndexError
-            if pattern1.search(lines[i]) and pattern2.search(lines[i + 1]):
-                matches.append((func_addr, lines[i], lines[i + 1]))
+            if pattern1.search(lines[i]):
+                if pattern2.search(lines[i + 1]):
+                    matches.append((func_addr, lines[i], lines[i + 1]))
+                elif pattern3.search(lines[i + 1]):  # UnlinkedCall Object ?
+                    # see https://github.com/cryptax/misc-code/issues/7
+                    reg_value = pattern3.search(lines[i + 1]).group(1)
+                    pattern4 = re.compile(rf"ldp\s+(x\d+),\s+(x\d+),\s+\[{reg_value}]")
+                    if i + 2 < len(lines) and pattern4.search(lines[i + 2]):
+                        matches.append(
+                            (func_addr, lines[i], lines[i + 1], lines[i + 2])
+                        )
     return matches
 
 
@@ -223,18 +233,27 @@ def main():
 
     output = run_command(binary, first_target, second_target, fcn_addr=args.f)
 
-    instr_pattern1 = re.compile(f"add\\s+(x\\d+),\\s+x27,\\s+{first_target},\\s+lsl\\s+12")
-    instr_pattern2 = re.compile(f"ldr\\s+(x\\d+),\\s+\\[(x\\d+),\\s+{second_target}]")
-
-    matches = search_patterns(output, instr_pattern1, instr_pattern2)
+    instr_pattern1 = re.compile(rf"add\s+(x\d+),\s+x27,\s+{first_target},\s+lsl\s+12")
+    instr_pattern2 = re.compile(rf"ldr\s+(x\d+),\s+\[(x\d+),\s+{second_target}]")
+    instr_pattern3 = re.compile(rf"add\s+(x\d+),\s+(x\d+),\s+{second_target}")
+    matches = search_patterns(output, instr_pattern1, instr_pattern2, instr_pattern3)
 
     if matches:
         print(f"Found {GREEN}{len(matches)}{NC} direct matches:")
-        for func_addr, line1, line2 in matches:
-            if args.f and func_addr:
-                print(f"Function: {GREEN}{func_addr.split()[0]}{NC}")
-            print(f"{line1}")
-            print(f"{line2}\n")
+        for match in matches:
+            if len(match) == 3:
+                for func_addr, line1, line2 in matches:
+                    if args.f and func_addr:
+                        print(f"Function: {GREEN}{func_addr.split()[0]}{NC}")
+                    print(f"{line1}")
+                    print(f"{line2}\n")
+            elif len(match) == 4:
+                for func_addr, line1, line2, line3 in matches:
+                    if args.f and func_addr:
+                        print(f"Function: {GREEN}{func_addr.split()[0]}{NC}")
+                    print(f"{line1}")
+                    print(f"{line2}")
+                    print(f"{line3}\n")
     else:
         print(f"{RED}No matches found.{NC}")
 
