@@ -39,6 +39,15 @@ store_entry() {
     echo -e "\e[32m[OK]\e[0m Entry saved."
 }
 
+print_entry() {
+    local entry_text="$1"
+    local entry_keywords="$2"
+
+    echo -e "\e[1;33m------------------------\e[0m"
+    echo -e "\e[36m$entry_text\e[0m"
+    echo -e "\e[35mKeywords:\e[0m $entry_keywords"
+}
+
 search_entries() {
     local mode="or"
     local keywords=()
@@ -74,9 +83,7 @@ search_entries() {
                 if [[ "$mode" == "and" && $match_count -eq ${#keywords[@]} ]] || \
                    [[ "$mode" == "or" && $match_count -gt 0 ]]; then
                     found=1
-                    echo -e "\e[1;33m------------------------\e[0m"
-                    echo -e "\e[36m$entry_text\e[0m"
-                    echo -e "\e[35mKeywords:\e[0m $entry_keywords"
+		    print_entry "$entry_text $entry_keywords"
                 fi
             fi
 
@@ -119,19 +126,45 @@ show_info() {
     echo "Number of entries: $count"
 }
 
-case "$1" in
-    store)
-        shift
-        store_entry "$@"
-        ;;
-    search)
-        shift
-        search_entries "$@"
-        ;;
-    info)
-        show_info
-        ;;
-    *)
-        echo "Usage: brain [store|search|info]"
-        ;;
-esac
+print_all() {
+    if [[ -f "$BRAIN_FILE" ]]; then
+        entry_text=""
+        entry_keywords=""
+        while IFS= read -r line || [[ -n "$line" ]]; do
+            if [[ "$line" == Text:* ]]; then
+                entry_text="${line#Text: }"
+            elif [[ "$line" == Keywords:* ]]; then
+                entry_keywords="${line#Keywords: }"
+                print_entry "$entry_text" "$entry_keywords"
+                entry_text=""
+                entry_keywords=""
+            fi
+        done < "$BRAIN_FILE"
+    else
+        echo "No brain file found at $BRAIN_FILE"
+    fi
+
+}
+
+command="$1"
+
+if [[ -z "$command" ]]; then
+    print_all
+else    
+    case "$1" in
+	store)
+            shift
+            store_entry "$@"
+            ;;
+	search)
+            shift
+            search_entries "$@"
+            ;;
+	info)
+            show_info
+            ;;
+	*)
+            echo "Usage: brain [store|search|info]"
+            ;;
+    esac
+fi
