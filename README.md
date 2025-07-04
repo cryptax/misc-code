@@ -10,6 +10,7 @@
 ## W32/SkyAI string de-obfuscation
 
 - `./topozuy-decrypt.py`: string de-obfuscation
+- `./topozuy-extract.py`: extract embedded PE
 
 ## Android/Ztorg reverse engineering
 
