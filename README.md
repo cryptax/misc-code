@@ -7,6 +7,10 @@
 - `./frida-hook/michaelrocks.js`: Frida hook to display de-obfuscated strings
 - `./flubot/DGA.java`: standalone implementation of Flubot's DGA algorithm 
 
+## W32/SkyAI string de-obfuscation
+
+- `./topozuy-decrypt.py`: string de-obfuscation
+
 ## Android/Ztorg reverse engineering
 
 - string-decode.py: standalone Python script to de-obfuscate Ztorg strings
